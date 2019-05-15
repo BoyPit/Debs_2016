@@ -2,30 +2,28 @@ package tools.parser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.TimeZone;
 
-import javax.tools.Tool;
-
+import entity.Comment;
 import entity.Post;
 import tools.Algo.ToolBox;
 
-public class parserPost {
+public class commentParser {
 
 	SimpleDateFormat format;
 
-	public String parseData(String content, ArrayList<Integer> score, ArrayList<Post> result) {
+	public String parseData(String content, ArrayList<Integer> score, ArrayList<Comment> result) {
 
 		format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 		format.setTimeZone(TimeZone.getTimeZone("GMT"));
+		
 		ArrayList<Integer> top3index;
 		String sortie = "";
 		String[] line;
-		Post post;
+		Comment comment;
 		Date timestamp;
 		String[] raw = content.split("\r\n");
 		for (int i = 0; i < raw.length; i++) {
@@ -34,16 +32,24 @@ public class parserPost {
 
 				line = raw[i].split("\\|");
 
-				post = new Post(getTimeStamp(line[0]), getPostId(line[1]), getUserId(line[2]), getContent(line[3]),
-						getUserName(line[4]));
-
-				result.add(post);
+				comment = new Comment(getTimeStamp(line[0]), getPostId(line[1]), getUserId(line[2]), getContent(line[3]),line[4],Integer.parseInt(line[5]),Integer.parseInt(line[6]));
+				
+				if(comment.getPostCommented() != -1)
+				{
+					comment.setRelatedPost(comment.getPostCommented());
+					
+				}
+				 
+				result.add(comment);
 				score.add(10);
+				
+				
+				
 				for (int j = 0; j < result.size(); j++)
 					score.set(j, 10);
 
 				top3index = ToolBox.decreaseScore(result, score);
-				sortie = sortie + ToolBox.outPut(result, score, top3index, format, post.getTimestamp());
+			//	sortie = sortie + ToolBox.outPut(result, score, top3index, format, post.getTimestamp());
 				if (i != raw.length - 1)
 					sortie = sortie + "\r\n";
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface ParserInterface {
 	
-	Object parseData(String s, ArrayList<Integer> score);
+	Object parseData(String s, ArrayList<Integer> score, String sortie);
 	
 
 }

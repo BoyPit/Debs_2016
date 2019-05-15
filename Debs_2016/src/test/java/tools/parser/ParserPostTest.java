@@ -45,9 +45,12 @@ public class ParserPostTest {
 	@Test
 	public void testParseOneLineData() throws ParseException {
 
+		
 		ArrayList<Integer> Score = new ArrayList<Integer>();
 		String input = "2010-02-01T05:12:32.921+0000|1039993|3981||Lei Liu\r\n";
-		ArrayList<Post> resultat = parser.parseData(input, Score);
+		String sortie ="";
+		ArrayList<Post> resultat = new ArrayList<Post>(10);
+		sortie = parser.parseData(input, Score,resultat);
 
 		assertEquals("2010-02-01T05:12:32.921+0000", format.format(resultat.get(0).getTimestamp().getTime()));
 		assertEquals(1039993, resultat.get(0).getPostId());
@@ -69,7 +72,9 @@ public class ParserPostTest {
 		String input = "2010-02-01T05:12:32.921+0000|1039993|3981||Lei Liu\r\n"
 				+ "2010-02-02T19:53:43.226+0000|299101|4661|photo299101.jpg|Michael Wang\r\n"
 				+ "2010-02-09T04:05:10.421+0000|529360|2608||Wei Zhu";
-		ArrayList<Post> resultat = parser.parseData(input,Score);
+		String sortie ="";
+		ArrayList<Post> resultat = new ArrayList<Post>(10);
+		sortie = parser.parseData(input, Score,resultat);
 
 		
 		
@@ -112,11 +117,11 @@ public class ParserPostTest {
 				"2010-03-24T00:01:01.943+0000|4|47|D|Tissa Perera\r\n" + 
 				"2010-05-25T00:01:01.943+0000|5|47|F|Tissa Perera";
 		
-				ArrayList<Post> resultat = parser.parseData(input,Score);
-		
+		String sortie ="";
+		ArrayList<Post> resultat = new ArrayList<Post>(10);
+		sortie = parser.parseData(input, Score,resultat);		
 	
 		System.out.println(Score.toString());
-
 	}
 	
 
