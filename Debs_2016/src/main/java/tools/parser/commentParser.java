@@ -59,6 +59,7 @@ public class commentParser {
 			}
 
 		}
+		ToolBox.findRelatedPosts(result);
 		return sortie;
 
 	}

@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
 
+import entity.Comment;
 import entity.Post;
 
 public class ToolBox {
@@ -84,6 +85,31 @@ public class ToolBox {
 		
 		
 		return result;
+	}
+	
+	public static void findRelatedPosts(List<Comment> comments) {
+		Comment Ctemp;
+		for(Comment c : comments) {
+			if(c.getRelatedPost() != -1) {
+				Ctemp = c;
+				while(Ctemp.getPostCommented() == -1) {
+					for(Comment search : comments) {
+						if(search.getCommentId() == Ctemp.getCommentReplied()) {
+							Ctemp = search;
+							break;
+						}
+					}
+				}
+				c.setRelatedPost(Ctemp.getPostCommented());
+			}
+		}
+	}
+	
+	public static ArrayList<Integer> CountScoreComment(ArrayList<Comment> comments)
+	{
+		
+		
+		return null;
 	}
 	
 

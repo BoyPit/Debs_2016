@@ -25,6 +25,7 @@ public class Comment {
 		this.userName = userName;
 		this.commentReplied = commentReplied;
 		this.postCommented = postCommented;
+		this.relatedPost = -1;
 	}
 
 
