@@ -39,7 +39,6 @@ public class ThreadingTest {
 		{
 			 date1 = sortie.take();
 			 date2 = sortie.take();
-			 
 			 assertEquals(-1, date1.getTimestamp().compareTo(date2.getTimestamp()));
 		}
 	}
