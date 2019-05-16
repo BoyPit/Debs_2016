@@ -90,7 +90,7 @@ public class ToolBox {
 	public static void findRelatedPosts(List<Comment> comments) {
 		Comment Ctemp;
 		for(Comment c : comments) {
-			if(c.getRelatedPost() != -1) {
+			if(c.getRelatedPost() == -1) {
 				Ctemp = c;
 				while(Ctemp.getPostCommented() == -1) {
 					for(Comment search : comments) {

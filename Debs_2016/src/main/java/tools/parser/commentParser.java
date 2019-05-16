@@ -48,7 +48,7 @@ public class commentParser {
 				for (int j = 0; j < result.size(); j++)
 					score.set(j, 10);
 
-				top3index = ToolBox.decreaseScore(result, score);
+			//	top3index = ToolBox.decreaseScore(result, score);
 			//	sortie = sortie + ToolBox.outPut(result, score, top3index, format, post.getTimestamp());
 				if (i != raw.length - 1)
 					sortie = sortie + "\r\n";
