@@ -6,12 +6,13 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 import entity.Comment;
+import entity.Evenement;
 import entity.Post;
 import tools.Algo.ToolBox;
 
 public class Consumer implements Runnable {
 	
-	BlockingQueue<Object> queue;
+	BlockingQueue<Evenement> queue;
 	List<Post> posts;
 	List<Comment> comments;
 	List<Post> top3;
@@ -19,7 +20,7 @@ public class Consumer implements Runnable {
 	List<Post> lastTop3;
 	Calendar currentDate;
 	
-	public Consumer(BlockingQueue<Object> queue, List<Post> posts, List<Comment> comments) {
+	public Consumer(BlockingQueue<Evenement> queue, List<Post> posts, List<Comment> comments) {
 		super();
 		this.queue = queue;
 		this.posts = posts;
@@ -30,12 +31,12 @@ public class Consumer implements Runnable {
 	@Override
 	public void run() {
 		try {
-			Object obj = queue.take();
-			if(obj instanceof Comment) {
-				comments.add((Comment) obj);
+			Evenement event = queue.take();
+			if(event instanceof Comment) {
+				comments.add((Comment) event);
 				currentDate = comments.get(comments.size()-1).getTimestamp();
-			}else if(obj instanceof Post){
-				posts.add((Post) obj);
+			}else if(event instanceof Post){
+				posts.add((Post) event);
 				currentDate = posts.get(posts.size()-1).getTimestamp();
 			}else {
 				System.out.println("\nInput object is neither a Post or a Comment.\n");
