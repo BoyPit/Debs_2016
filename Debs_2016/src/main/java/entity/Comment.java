@@ -2,7 +2,7 @@ package entity;
 
 import java.util.Calendar;
 
-public class Comment {
+public class Comment implements Evenement {
 
 	private Calendar timestamp;
 	private int commentId;
@@ -25,7 +25,16 @@ public class Comment {
 		this.userName = userName;
 		this.commentReplied = commentReplied;
 		this.postCommented = postCommented;
-		this.relatedPost = -1;
+		if(postCommented != -1)
+		{
+			this.relatedPost = postCommented;
+		}
+		else
+		{
+			this.relatedPost = -1;
+
+		}
+		
 	}
 
 

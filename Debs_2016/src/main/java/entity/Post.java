@@ -3,7 +3,7 @@ package entity;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Post {
+public class Post implements Evenement{
 	
 	private Calendar timestamp;
 	private int postId;
