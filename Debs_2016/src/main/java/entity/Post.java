@@ -10,6 +10,7 @@ public class Post implements Evenement{
 	private int userId;
 	private String content;
 	private String userName;
+	private int score;
 	
 	public Post(Calendar timestamp, int postId, int userId, String content, String userName) {
 		super();
@@ -18,6 +19,7 @@ public class Post implements Evenement{
 		this.userId = userId;
 		this.content = content;
 		this.userName = userName;
+		this.score = 10;
 	}
 
 	public Calendar getTimestamp() {
@@ -60,12 +62,21 @@ public class Post implements Evenement{
 		this.userName = userName;
 	}
 
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((content == null) ? 0 : content.hashCode());
 		result = prime * result + postId;
+		result = prime * result + score;
 		result = prime * result + ((timestamp == null) ? 0 : timestamp.hashCode());
 		result = prime * result + userId;
 		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
@@ -88,6 +99,8 @@ public class Post implements Evenement{
 			return false;
 		if (postId != other.postId)
 			return false;
+		if (score != other.score)
+			return false;
 		if (timestamp == null) {
 			if (other.timestamp != null)
 				return false;
@@ -102,10 +115,6 @@ public class Post implements Evenement{
 			return false;
 		return true;
 	}
-
-	
-
 	
 	
-
 }
