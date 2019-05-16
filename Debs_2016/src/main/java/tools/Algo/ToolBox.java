@@ -38,7 +38,7 @@ public class ToolBox {
 			}
 		}
 		
-		 scoreCopy = new ArrayList<Integer>(score);
+		scoreCopy = new ArrayList<Integer>(score);
 
 		int index;
 		int maxScore;
@@ -61,6 +61,84 @@ public class ToolBox {
 		
 		return top3;
 		
+	}
+	
+	public static List<Integer> countScore(List<Post> posts, List<Comment> comments, Calendar currentDate){
+		
+		List<Integer> top3 = new ArrayList<Integer>(3);
+		List<Integer> commentScores = new ArrayList<Integer>();
+		List<Integer> scoreCopy;
+		
+		commentScores.clear();
+		for(int i = 0; i < comments.size(); i++) {
+			commentScores.add(10);
+		}
+		
+		for(int i = 0; i < posts.size(); i++) {
+			posts.get(i).setScore(10);
+		}
+		
+		// ### Count the score of every Post
+		long timePassed;
+		int decrease;
+		// Counts what's worth each comment
+		for(int j = 0; j < comments.size() - 1; j++) {
+			timePassed = currentDate.getTimeInMillis()-comments.get(j).getTimestamp().getTimeInMillis();
+			decrease = (int)(timePassed/86400000);
+			if(decrease > 10) {
+				decrease = 10;
+			}
+			commentScores.set(j, commentScores.get(j) - decrease);
+		}
+		// Counts the total score of each post
+		for(int i = 0; i < posts.size() - 1; i++)
+		{
+			timePassed = currentDate.getTimeInMillis()-posts.get(i).getTimestamp().getTimeInMillis();
+			decrease = (int)(timePassed/86400000);
+			if(decrease > 10) {
+				decrease = 10;
+			}
+			posts.get(i).setScore(posts.get(i).getScore() - decrease);
+			for(int c = 0; c < comments.size(); c++) {
+				if(comments.get(c).getRelatedPost() == posts.get(i).getPostId()) {
+					posts.get(i).setScore(posts.get(i).getScore() + commentScores.get(c));
+				}
+			}
+			if(posts.get(i).getScore() <= 0) {	// Checks if a post is dead (score down to 0)
+				posts.remove(i);
+				for(int c = 0; c < comments.size(); c++) { // Removes from data every comment linked to the dying post
+					if(comments.get(c).getRelatedPost() == posts.get(i).getPostId()) {
+						comments.remove(c);
+					}
+				}
+				i--;
+			}
+		}
+		
+		// ### Get the top 3 of best Posts (IDs)
+		scoreCopy = new ArrayList<Integer>(posts.size());
+		for(int i = 0; i < posts.size(); i++) {
+			scoreCopy.set(i, posts.get(i).getScore()); 
+		}
+		int index;
+		int maxScore;
+		for(int i =0; i<3;i++)
+		{
+			maxScore = Collections.max(scoreCopy);
+			if(maxScore <= 0)
+			{
+				scoreCopy.clear();
+				return top3;
+			}
+			else {
+				index = scoreCopy.indexOf(maxScore);
+				scoreCopy.set(index,0);
+				top3.add(index);
+			}
+		}
+		
+		scoreCopy.clear();
+		return top3;
 	}
 	
 	public static String outPut(List<Post> input, List<Integer> score, List<Integer> top3Index, SimpleDateFormat format, Calendar currentDate)
@@ -89,18 +167,29 @@ public class ToolBox {
 	
 	public static void findRelatedPosts(List<Comment> comments) {
 		Comment Ctemp;
+		boolean gotItAlready = false;
 		for(Comment c : comments) {
 			if(c.getRelatedPost() == -1) {
 				Ctemp = c;
+				whileloop:
 				while(Ctemp.getPostCommented() == -1) {
+					forloop:
 					for(Comment search : comments) {
 						if(search.getCommentId() == Ctemp.getCommentReplied()) {
 							Ctemp = search;
-							break;
+							if(Ctemp.getRelatedPost() != -1) {
+								c.setRelatedPost(Ctemp.getRelatedPost());
+								gotItAlready = true;
+								break whileloop;
+							}
+							break forloop;
 						}
 					}
 				}
-				c.setRelatedPost(Ctemp.getPostCommented());
+				if(!gotItAlready) {
+					c.setRelatedPost(Ctemp.getPostCommented());
+				}
+				gotItAlready = false;
 			}
 		}
 	}
